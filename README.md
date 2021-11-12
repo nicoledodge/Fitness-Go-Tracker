@@ -18,10 +18,7 @@ MongoDB
 ## Description
 
 ## Installation
-Clone down the repo:
-```
-git clone git@github.com:nicoledodge/express.gym.git
-```
+Clone down the repo.  
 Install dependencies:
 ```
 $ npm install
