@@ -2,11 +2,11 @@ const router = require("express").Router();
 const Workout = require("../models/workout.js");
 
 //post the workouts
-router.post("/api/workout", ({ body }, res) => {
+router.post("/api/workouts", ({ body }, res) => {
     Workout.create(body)
 
-        .then(dbWorkout => {
-            res.json(dbWorkout);
+        .then(dbWorkouts => {
+            res.json(dbWorkouts);
         })
         .catch(err => {
             res.status(400).json(err);
@@ -15,17 +15,17 @@ router.post("/api/workout", ({ body }, res) => {
 
 //update workout exercise with put route
 //findbyid
-router.put("/api/transaction", (req, res) => {
+router.put("/api/workouts/:id", (req, res) => {
     Workout.findByIdAndUpdate(
         res.id,
         { $push:{ exercises: req }},
-        // "runValidators" will ensure new exercises meet our schema requirements
+
         { new: true}
     )
 
         //new exercises need to meet schema requirements lol but how??
-        .then((dbWorkout) => {
-            res.json(dbWorkout);
+        .then((dbWorkouts) => {
+            res.json(dbWorkouts);
         })
         .catch(err => {
             res.status(400).json(err);
@@ -33,7 +33,7 @@ router.put("/api/transaction", (req, res) => {
 });
 
 //get workut aggregate
-router.get("/api/workout", (req, res) => {
+router.get("/api/workouts", (req, res) => {
         Workout.aggregate([{
             $addFields: {
                 totalDuration: {
@@ -43,15 +43,15 @@ router.get("/api/workout", (req, res) => {
         }
     ])
         // .sort({ date: -1 })
-        .then((dbWorkout) => {
-            res.json(dbWorkout);
+        .then((dbWorkouts) => {
+            res.json(dbWorkouts);
         })
         .catch(err => {
             res.status(400).json(err);
         });
 });
 
-router.get("/api/workout/range", (req, res) => {
+router.get("/api/workouts/range", (req, res) => {
     Workout.aggregate(
         [{
             $addFields: {
@@ -63,8 +63,8 @@ router.get("/api/workout/range", (req, res) => {
     )
         .sort({ date: -1 }).limit(7)
         //need a limit structured the same as sort
-        .then((dbWorkout) => {
-            res.json(dbWorkout);
+        .then((dbWorkouts) => {
+            res.json(dbWorkouts);
         })
         .catch(err => {
             res.status(400).json(err);
@@ -72,10 +72,10 @@ router.get("/api/workout/range", (req, res) => {
 });
 
 // delete route - find id and delete?
-router.post("/api/workout", ({ body }, res) => {
-    Workout.create(body)
-        .then(dbWorkout => {
-            res.json(dbWorkout);
+router.delete("/api/workouts", ({ body }, res) => {
+    Workout.findByIdAndDelete(body.id)
+        .then(() => {
+            res.json(true);
         })
         .catch(err => {
             res.status(400).json(err);
