@@ -1,12 +1,12 @@
 const router = require("express").Router();
-const workout = require("../models/workout.js");
+const Workout = require("../models/workout.js");
 
 //post the workouts
 router.post("/api/workout", ({ body }, res) => {
-    workout.create(body)
+    Workout.create(body)
 
-        .then(dbworkout => {
-            res.json(dbworkout);
+        .then(dbWorkout => {
+            res.json(dbWorkout);
         })
         .catch(err => {
             res.status(400).json(err);
@@ -16,10 +16,16 @@ router.post("/api/workout", ({ body }, res) => {
 //update workout exercise with put route
 //findbyid
 router.put("/api/transaction", (req, res) => {
-    workout.findByIdAndUpdate({})
+    Workout.findByIdAndUpdate(
+        res.id,
+        { $push:{ exercises: req }},
+        // "runValidators" will ensure new exercises meet our schema requirements
+        { new: true}
+    )
+
         //new exercises need to meet schema requirements lol but how??
-        .then((dbworkout) => {
-            res.json(dbworkout);
+        .then((dbWorkout) => {
+            res.json(dbWorkout);
         })
         .catch(err => {
             res.status(400).json(err);
@@ -28,14 +34,17 @@ router.put("/api/transaction", (req, res) => {
 
 //get workut aggregate
 router.get("/api/workout", (req, res) => {
-    workout.aggregate([
-        {
-            //research aggregate functions to determine total duration
+        Workout.aggregate([{
+            $addFields: {
+                totalDuration: {
+                    $sum: "$exercises.duration"
+                }
+            }
         }
     ])
         // .sort({ date: -1 })
-        .then((dbworkout) => {
-            res.json(dbworkout);
+        .then((dbWorkout) => {
+            res.json(dbWorkout);
         })
         .catch(err => {
             res.status(400).json(err);
@@ -43,15 +52,19 @@ router.get("/api/workout", (req, res) => {
 });
 
 router.get("/api/workout/range", (req, res) => {
-    workout.aggregate([
-        {
-            //research aggregate functions to determine total duration
-        }
-    ])
-        .sort({ date: -1 })
+    Workout.aggregate(
+        [{
+            $addFields: {
+                totalDuration: {
+                    $sum: "$exercises.duration"
+                }
+            }
+        }]
+    )
+        .sort({ date: -1 }).limit(7)
         //need a limit structured the same as sort
-        .then((dbworkout) => {
-            res.json(dbworkout);
+        .then((dbWorkout) => {
+            res.json(dbWorkout);
         })
         .catch(err => {
             res.status(400).json(err);
@@ -60,9 +73,9 @@ router.get("/api/workout/range", (req, res) => {
 
 // delete route - find id and delete?
 router.post("/api/workout", ({ body }, res) => {
-    workout.create(body)
-        .then(dbworkout => {
-            res.json(dbworkout);
+    Workout.create(body)
+        .then(dbWorkout => {
+            res.json(dbWorkout);
         })
         .catch(err => {
             res.status(400).json(err);
