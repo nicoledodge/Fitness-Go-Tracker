@@ -4,6 +4,7 @@ const workout = require("../models/workout.js");
 //post the workouts
 router.post("/api/workout", ({ body }, res) => {
     workout.create(body)
+
         .then(dbworkout => {
             res.json(dbworkout);
         })
@@ -16,7 +17,7 @@ router.post("/api/workout", ({ body }, res) => {
 //findbyid
 router.put("/api/transaction", (req, res) => {
     workout.findByIdAndUpdate({})
-        //new exercies need to meet schema requirements lol but how??
+        //new exercises need to meet schema requirements lol but how??
         .then((dbworkout) => {
             res.json(dbworkout);
         })
