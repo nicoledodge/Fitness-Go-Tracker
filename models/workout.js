@@ -5,14 +5,14 @@ const workoutSchema = new Schema({
     day: {
         type: Date,
         required:true,
-        default: Date.now(),
+        default: () => new Date.now(),
     },
-    exercises:{
+    exercises: [{
         type: Array,
         required: true,
-        },
+        }],
 });
 
-const workout = mongoose.model('workout', workoutSchema);
+const Workout = mongoose.model('Workout', workoutSchema);
 
-module.exports = workout;
+module.exports = Workout;
