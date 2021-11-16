@@ -2,7 +2,7 @@
 MongoDB
 
 ##  Demo
-![Demo]()
+![Demo](https://github.com/nicoledodge/Fitness-Go-Tracker/blob/main/public/assets/fitness%20tracker%20demo.gif?raw=true)
 
 ## Licenses
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
