@@ -1,7 +1,8 @@
 const mongoose = require('mongoose');
 const db = require('../models');
+require('dotenv').config();
 
-mongoose.connect('mongodb://127.0.0.1/workout', {
+mongoose.connect(  process.env.MONGODB_URI || "mongodb://127.0.0.1/workout", {
   useNewUrlParser: true,
   useFindAndModify: false,
   useUnifiedTopology: true,
