@@ -1,5 +1,6 @@
 const router = require("express").Router();
 const Workout = require("../models/workout.js");
+const mongoose = require('mongoose');
 
 //post the workouts
 router.post("/api/workouts", ({ body }, res) => {
@@ -17,12 +18,14 @@ router.post("/api/workouts", ({ body }, res) => {
 //findbyid
 router.put("/api/workouts/:id", (req, res) => {
     Workout.findByIdAndUpdate(
-        res.id,
-        { $push:{ exercises: req }},
-
-        { new: true}
+        req.params.id,
+        {
+            $push: {exercises: req.body}
+        },
+        {
+            new: true
+        }
     )
-
         //new exercises need to meet schema requirements lol but how??
         .then((dbWorkouts) => {
             res.json(dbWorkouts);
